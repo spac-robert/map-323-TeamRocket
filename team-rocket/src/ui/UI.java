@@ -2,6 +2,7 @@ package ui;
 
 import domain.Utilizator;
 import service.Service;
+import service.ServiceFile;
 
 import java.util.List;
 import java.util.Scanner;
