@@ -20,7 +20,7 @@ public class Main {
         BufferedReader reader = new BufferedReader(new FileReader("data/connect-database.txt"));
         String name = reader.readLine();
         String password = reader.readLine();
-        return new UserDatabase("jdbc:postgresql://localhost:5432/postgres", name, password);
+        return new UserDatabase("jdbc:postgresql://localhost:5432/social_network", name, password);
     }
 
     public static void main(String[] args) {
@@ -32,7 +32,7 @@ public class Main {
             Service service = new Service(serviceFile, serviceDatabase);
             UI ui = new UI(service);
             ui.menu();
-        } catch (IOException |SQLException e) {
+        } catch (IOException | SQLException e) {
             System.out.println(e.getMessage());
         }
     }

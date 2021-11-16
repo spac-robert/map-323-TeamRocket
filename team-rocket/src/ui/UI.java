@@ -93,8 +93,14 @@ public class UI {
         System.out.println("5. Stergere prieten");
         System.out.println("6. Determinarea numarului de comunitati");
         System.out.println("7. Determinarea celei mai sociabile comunitati");
-        System.out.println("8. Iesire");
+        System.out.println("8. Read users from db");
+        System.out.println("0. Iesire");
         System.out.println("-----------------------");
+    }
+
+    private void printUsersFromDB() {
+        Iterable<Utilizator> users = this.service.printAllUsersFromDB();
+        users.forEach(System.out::println);
     }
 
     public void menu() {
@@ -103,26 +109,36 @@ public class UI {
         while (loop) {
             menuPrint();
             int option = sc.nextInt();
-            if (option == 1) {
-                saveUI();
-            } else if (option == 2) {
-                deleteUI();
-            } else if (option == 3) {
-                printAllUI();
-            } else if (option == 4) {
-                addFriendUI();
-            } else if (option == 5) {
-                deleteFriendUI();
-            } else if (option == 6) {
-                getNrOfConnectedComponentsUI();
-            } else if (option == 7) {
-                getLargestConnectedComponentUI();
-            } else if (option == 8) {
-                loop = false;
-            } else {
-                System.out.println("Optiune inexistenta! Reincercati!");
+            switch (option) {
+                case 1 -> {
+                    saveUI();
+                }
+                case 2 -> {
+                    deleteUI();
+                }
+                case 3 -> {
+                    printAllUI();
+                }
+                case 4 -> {
+                    addFriendUI();
+                }
+                case 5 -> {
+                    deleteFriendUI();
+                }
+                case 6 -> {
+                    getNrOfConnectedComponentsUI();
+                }
+                case 7 -> {
+                    getLargestConnectedComponentUI();
+                }
+                case 8 -> {
+                    printUsersFromDB();
+                }
+                case 0 -> loop = false;
+                default -> {
+                    System.out.println("Optiune inexistenta! Reincercati!");
+                }
             }
         }
     }
-
 }

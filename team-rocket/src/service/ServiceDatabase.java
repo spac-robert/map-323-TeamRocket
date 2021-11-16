@@ -9,4 +9,8 @@ public class ServiceDatabase {
     public ServiceDatabase(Repository<Long, Utilizator> repository) {
         this.repository = repository;
     }
+
+    public Iterable<Utilizator> findAllUsers() {
+        return repository.findAll();
+    }
 }

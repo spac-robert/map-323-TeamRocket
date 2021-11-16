@@ -3,31 +3,21 @@ package repository.database;
 import domain.Utilizator;
 import repository.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+import java.sql.*;
+import java.util.*;
 
 public class UserDatabase implements Repository<Long, Utilizator> {
-    private String jdbcURL;
-    private String username;
-    private String password;
+    private Connection connection;
 
     private void connect(String jdbcURL, String username, String password) throws SQLException {
         Properties properties = new Properties();
-        properties.setProperty("user",username);
-        properties.setProperty("password",password);
-        properties.setProperty("ssl","true");
-        ///TODO connection to database and implement the methods
-        Connection connection = DriverManager.getConnection(jdbcURL, properties);
-        String url = "jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true";
-        Connection conn = DriverManager.getConnection(url);
+        properties.setProperty("user", username);
+        properties.setProperty("password", password);
+        properties.setProperty("ssl", "require");
+        connection = DriverManager.getConnection(jdbcURL, properties);
     }
 
     public UserDatabase(String jdbcURL, String username, String password) throws SQLException {
-        this.jdbcURL = jdbcURL;
-        this.username = username;
-        this.password = password;
         connect(jdbcURL, username, password);
     }
 
@@ -38,7 +28,23 @@ public class UserDatabase implements Repository<Long, Utilizator> {
 
     @Override
     public Iterable<Utilizator> findAll() {
-        return null;
+        Map<Long, Utilizator> users = new HashMap<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Long id = resultSet.getLong("id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                Utilizator user = new Utilizator(firstName, lastName);
+                user.setId(id);
+                users.put(id,user);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return users.values();
     }
 
     @Override

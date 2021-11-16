@@ -45,4 +45,9 @@ public class Service {
     public Iterable<Utilizator> printAll() {
         return serviceFile.printAll();
     }
+
+    public Iterable<Utilizator> printAllUsersFromDB() {
+        return serviceDatabase.findAllUsers();
+    }
+
 }
