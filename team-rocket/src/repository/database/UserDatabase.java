@@ -16,7 +16,7 @@ public class UserDatabase implements Repository<Long, Utilizator> {
         properties.setProperty("user",username);
         properties.setProperty("password",password);
         properties.setProperty("ssl","true");
-        ///TODO connection to database
+        ///TODO connection to database and implement the methods
         Connection connection;
     }
 
