@@ -2,12 +2,12 @@ package domain;
 
 import java.util.*;
 
-public class Utilizator extends Entity<Long> {
+public class User extends Entity<Long> {
     private final String firstName;
     private final String lastName;
-    private final List<Utilizator> friends = new ArrayList<>();
+    private final List<User> friends = new ArrayList<>();
 
-    public Utilizator(String firstName, String lastName) {
+    public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -20,22 +20,18 @@ public class Utilizator extends Entity<Long> {
         return lastName;
     }
 
-    public List<Utilizator> getFriends() {
+    public List<User> getFriends() {
         return friends;
-    }
-
-    public void addFriend(Utilizator utilizator) {
-        friends.add(utilizator);
     }
 
     @Override
     public String toString() {
         StringBuilder stringOfFriends = new StringBuilder("[");
-        for (Utilizator utilizator : friends) {
-            String ut = "{" + utilizator.getId() + "; " + utilizator.firstName + "; " + utilizator.lastName + "} ";
+        for (User user : friends) {
+            String ut = "{" + user.getId() + "; " + user.firstName + "; " + user.lastName + "} ";
             stringOfFriends.append(ut);
         }
-        return "Utilizator{" +
+        return "User{" +
                 "id = " + id + ", " +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -45,8 +41,7 @@ public class Utilizator extends Entity<Long> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Utilizator)) return false;
-        Utilizator that = (Utilizator) o;
+        if (!(o instanceof User that)) return false;
         return getFirstName().equals(that.getFirstName()) &&
                 getLastName().equals(that.getLastName()) &&
                 getFriends().equals(that.getFriends());
@@ -57,7 +52,7 @@ public class Utilizator extends Entity<Long> {
         return Objects.hash(getFirstName(), getLastName(), getFriends());
     }
 
-    public void makeFriend(Utilizator utilizator) {
-        this.friends.add(utilizator);
+    public void makeFriend(User user) {
+        this.friends.add(user);
     }
 }

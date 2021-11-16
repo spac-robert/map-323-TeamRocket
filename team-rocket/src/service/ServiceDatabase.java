@@ -1,18 +1,16 @@
 package service;
 
-import domain.Utilizator;
+import domain.User;
 import repository.Repository;
 
 public class ServiceDatabase {
-    private Repository<Long, Utilizator> repository;
+    private final Repository<Long, User> repository;
 
-    public ServiceDatabase(Repository<Long, Utilizator> repository) {
+    public ServiceDatabase(Repository<Long, User> repository) {
         this.repository = repository;
     }
 
-    public Iterable<Utilizator> findAllUsers() {
-
+    public Iterable<User> findAllUsers() {
         return repository.findAll();
-
     }
 }

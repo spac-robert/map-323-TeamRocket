@@ -1,12 +1,12 @@
 package service;
 
-import domain.Utilizator;
+import domain.User;
 
 import java.util.List;
 
 public class Service {
-    private ServiceFile serviceFile;
-    private ServiceDatabase serviceDatabase;
+    private final ServiceFile serviceFile;
+    private final ServiceDatabase serviceDatabase;
 
     public Service(ServiceFile serviceFile, ServiceDatabase serviceDatabase) {
         this.serviceFile = serviceFile;
@@ -14,8 +14,8 @@ public class Service {
     }
 
 
-    public void saveUtilizator(String firstName, String lastName) {
-        serviceFile.saveUtilizator(firstName, lastName);
+    public void saveUser(String firstName, String lastName) {
+        serviceFile.saveUser(firstName, lastName);
     }
 
     public void addFriend(Long id1, Long id2) {
@@ -26,8 +26,8 @@ public class Service {
         serviceFile.deleteFriend(id1, id2);
     }
 
-    public void deleteUtilizator(Long id) {
-        serviceFile.deleteUtilizator(id);
+    public void deleteUser(Long id) {
+        serviceFile.deleteUser(id);
     }
 
     public int getNrOfConnectedComponents() {
@@ -38,15 +38,15 @@ public class Service {
         return serviceFile.getLargestConnectedComponent();
     }
 
-    public Utilizator getById(Long id) {
+    public User getById(Long id) {
         return serviceFile.getById(id);
     }
 
-    public Iterable<Utilizator> printAll() {
+    public Iterable<User> printAll() {
         return serviceFile.printAll();
     }
 
-    public Iterable<Utilizator> printAllUsersFromDB() {
+    public Iterable<User> printAllUsersFromDB() {
         return serviceDatabase.findAllUsers();
     }
 

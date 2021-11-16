@@ -1,13 +1,13 @@
 package domain.validators;
 
-import domain.Utilizator;
+import domain.User;
 import repository.Repository;
 
-public class UtilizatorValidator implements Validator<Utilizator> {
-    private Repository<Long, Utilizator> repository;
+public class UserValidator implements Validator<User> {
+    private Repository<Long, User> repository;
 
     @Override
-    public void validate(Utilizator entity) throws ValidationException {
+    public void validate(User entity) throws ValidationException {
         String message = "";
         if (entity.getFirstName().length() == 0) {
             message += "First name can't be an empty string!";

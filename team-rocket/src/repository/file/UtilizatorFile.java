@@ -1,51 +1,51 @@
 package repository.file;
 
 
-import domain.Utilizator;
+import domain.User;
 import domain.validators.Validator;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class UtilizatorFile extends AbstractFileRepository<Long, Utilizator> {
+public class UtilizatorFile extends AbstractFileRepository<Long, User> {
 
     private static Long nextId = 0L;
 
-    public Map<Long, Utilizator> getEntities() {
+    public Map<Long, User> getEntities() {
         return this.entities;
     }
 
-    public UtilizatorFile(String fileName, String fileName2, Validator<Utilizator> validator) {
+    public UtilizatorFile(String fileName, String fileName2, Validator<User> validator) {
         super(fileName, fileName2, validator);
         nextId++;
     }
 
     @Override
-    public Utilizator extractEntity(List<String> attributes) {
+    public User extractEntity(List<String> attributes) {
         long currentId = Long.parseLong(attributes.get(0));
         if (currentId > nextId) {
             nextId = currentId;
         }
-        Utilizator u = new Utilizator(attributes.get(1), attributes.get(2));
+        User u = new User(attributes.get(1), attributes.get(2));
         u.setId(Long.parseLong(attributes.get(0)));
         return u;
     }
 
     @Override
-    protected String createEntityAsString(Utilizator entity) {
+    protected String createEntityAsString(User entity) {
         return entity.getId() + ";" + entity.getFirstName() + ";" + entity.getLastName() + '\n';
     }
 
 
-    protected String createFriendshipsAsString(Utilizator entity) {
+    protected String createFriendshipsAsString(User entity) {
         int i = 0;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(entity.getId());
         stringBuilder.append(';');
-        for (Utilizator utilizator : entity.getFriends()) {
+        for (User user : entity.getFriends()) {
             i++;
-            stringBuilder.append(utilizator.getId());
+            stringBuilder.append(user.getId());
             if (i != entity.getFriends().size()) {
                 stringBuilder.append(',');
             }
@@ -57,17 +57,17 @@ public class UtilizatorFile extends AbstractFileRepository<Long, Utilizator> {
     @Override
     protected void makeFriendships(List<String> attributes) {
         if (attributes.size() == 2) {
-            Utilizator currentUtilizator = entities.get(Long.parseLong(attributes.get(0)));
+            User currentUser = entities.get(Long.parseLong(attributes.get(0)));
             String list = attributes.get(1);
             String[] ids = list.split(",");
             for (String stringOfId : ids) {
-                currentUtilizator.makeFriend(entities.get(Long.parseLong(stringOfId)));
+                currentUser.makeFriend(entities.get(Long.parseLong(stringOfId)));
             }
         }
     }
 
     @Override
-    public void writeToFriendshipFile(Utilizator entity) {
+    public void writeToFriendshipFile(User entity) {
         FileWriter file;
         try {
             file = new FileWriter(this.fileName2, true);
@@ -79,11 +79,11 @@ public class UtilizatorFile extends AbstractFileRepository<Long, Utilizator> {
     }
 
     @Override
-    public void deleteOneFriend(Long id, Utilizator entity) {
+    public void deleteOneFriend(Long id, User entity) {
         for (int i = 0; i < entity.getFriends().size(); i++) {
-            Utilizator utilizator = entity.getFriends().get(i);
+            User utilizator = entity.getFriends().get(i);
             if (Objects.equals(utilizator.getId(), id)) {
-                List<Utilizator> list = entity.getFriends();
+                List<User> list = entity.getFriends();
                 list.remove(utilizator);
             }
         }
@@ -91,14 +91,14 @@ public class UtilizatorFile extends AbstractFileRepository<Long, Utilizator> {
 
 
     @Override
-    public Utilizator save(Utilizator entity) {
+    public User save(User entity) {
         entity.setId(nextId);
         nextId++;
         return super.save(entity);
     }
 
-    public Utilizator delete(Long id) {
-        Utilizator aux = super.delete(id);
+    public User delete(Long id) {
+        User aux = super.delete(id);
         if (aux != null) {
             //clear file
             try {
@@ -111,7 +111,7 @@ public class UtilizatorFile extends AbstractFileRepository<Long, Utilizator> {
             for (Long key : keyList) {
                 writeToFile(entities.get(key));
             }
-            for (Utilizator utilizator : this.entities.values()) {
+            for (User utilizator : this.entities.values()) {
                 deleteOneFriend(id, utilizator);
             }
             saveFriendsToFile();

@@ -1,8 +1,7 @@
 package ui;
 
-import domain.Utilizator;
+import domain.User;
 import service.Service;
-import service.ServiceFile;
 
 import java.util.List;
 import java.util.Scanner;
@@ -19,7 +18,7 @@ public class UI {
         System.out.println("Dati prenumele si numele utilizatorului de adaugat: ");
         String firstName = sc.nextLine();
         String lastName = sc.nextLine();
-        this.service.saveUtilizator(firstName, lastName);
+        this.service.saveUser(firstName, lastName);
         System.out.println("Utilizatorul a fost adaugat!");
     }
 
@@ -59,7 +58,7 @@ public class UI {
             Scanner sc = new Scanner(System.in);
             System.out.println("Dati id-ul utilizatorului de sters: ");
             Long id = sc.nextLong();
-            this.service.deleteUtilizator(id);
+            this.service.deleteUser(id);
             System.out.println("Utilizatorul a fost sters!");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -80,7 +79,7 @@ public class UI {
     }
 
     private void printAllUI() {
-        Iterable<Utilizator> users = this.service.printAll();
+        Iterable<User> users = this.service.printAll();
         users.forEach(System.out::println);
     }
 
@@ -99,7 +98,7 @@ public class UI {
     }
 
     private void printUsersFromDB() {
-        Iterable<Utilizator> users = this.service.printAllUsersFromDB();
+        Iterable<User> users = this.service.printAllUsersFromDB();
         users.forEach(System.out::println);
     }
 
