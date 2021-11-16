@@ -1,4 +1,5 @@
 # IDEA artifacts and output dirs
+data/connect-database.txt
 .idea
 JavaDoc
 out
