@@ -24,9 +24,9 @@ public class Utilizator extends Entity<Long> {
         return friends;
     }
 
-//    public void addFriend(Utilizator utilizator) {
-//        friends.add(utilizator);
-//    }
+    public void addFriend(Utilizator utilizator) {
+        friends.add(utilizator);
+    }
 
     @Override
     public String toString() {

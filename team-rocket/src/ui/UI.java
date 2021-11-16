@@ -110,34 +110,24 @@ public class UI {
             menuPrint();
             int option = sc.nextInt();
             switch (option) {
-                case 1 -> {
-                    saveUI();
-                }
-                case 2 -> {
-                    deleteUI();
-                }
-                case 3 -> {
-                    printAllUI();
-                }
-                case 4 -> {
-                    addFriendUI();
-                }
-                case 5 -> {
-                    deleteFriendUI();
-                }
-                case 6 -> {
-                    getNrOfConnectedComponentsUI();
-                }
-                case 7 -> {
-                    getLargestConnectedComponentUI();
-                }
-                case 8 -> {
-                    printUsersFromDB();
-                }
+                case 1 -> saveUI();
+
+                case 2 -> deleteUI();
+
+                case 3 -> printAllUI();
+
+                case 4 -> addFriendUI();
+
+                case 5 -> deleteFriendUI();
+                case 6 -> getNrOfConnectedComponentsUI();
+
+                case 7 -> getLargestConnectedComponentUI();
+
+                case 8 -> printUsersFromDB();
+
                 case 0 -> loop = false;
-                default -> {
-                    System.out.println("Optiune inexistenta! Reincercati!");
-                }
+                default -> System.out.println("Optiune inexistenta! Reincercati!");
+
             }
         }
     }

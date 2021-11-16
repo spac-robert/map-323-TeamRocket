@@ -11,6 +11,8 @@ public class ServiceDatabase {
     }
 
     public Iterable<Utilizator> findAllUsers() {
+
         return repository.findAll();
+
     }
 }
