@@ -1,6 +1,6 @@
 package repository.graph;
 
-import domain.Utilizator;
+import domain.User;
 import repository.file.AbstractFileRepository;
 
 import java.util.*;
@@ -10,7 +10,7 @@ public class Graph {
     private final Map<Long, List<Long>> adjVertices = new HashMap<>();
     private List<Long> keyList;
 
-    public Graph(AbstractFileRepository<Long, Utilizator> repository) {
+    public Graph(AbstractFileRepository<Long, User> repository) {
         createGraph(repository);
     }
 
@@ -27,16 +27,16 @@ public class Graph {
         adjVertices.get(id2).add(id1);
     }
 
-    public void createGraph(AbstractFileRepository<Long, Utilizator> repository) {
-        keyList = new ArrayList<Long>(repository.getEntities().keySet());
+    public void createGraph(AbstractFileRepository<Long, User> repository) {
+        keyList = new ArrayList<>(repository.getEntities().keySet());
 
         for (Long key : keyList) {
             addVertex(key);
         }
-        for (Utilizator utilizator : repository.getEntities().values()) {
-            List<Utilizator> friends = utilizator.getFriends();
-            for (Utilizator utilizator1 : friends) {
-                addEdge(utilizator.getId(), utilizator1.getId());
+        for (User user : repository.getEntities().values()) {
+            List<User> friends = user.getFriends();
+            for (User utilizator1 : friends) {
+                addEdge(user.getId(), utilizator1.getId());
             }
         }
     }

@@ -1,24 +1,24 @@
 package service;
 
-import domain.Utilizator;
+import domain.User;
 import repository.file.AbstractFileRepository;
 import repository.graph.Graph;
 
 import java.util.*;
 
 public class ServiceFile {
-    private final AbstractFileRepository<Long, Utilizator> repository;
+    private final AbstractFileRepository<Long, User> repository;
 
-    public ServiceFile(AbstractFileRepository<Long, Utilizator> repository) {
+    public ServiceFile(AbstractFileRepository<Long, User> repository) {
         this.repository = repository;
     }
 
-    public void saveUtilizator(String firstName, String lastName) {
-        Utilizator utilizator = new Utilizator(firstName, lastName);
-        this.repository.save(utilizator);
+    public void saveUser(String firstName, String lastName) {
+        User user = new User(firstName, lastName);
+        this.repository.save(user);
     }
 
-    public void deleteUtilizator(Long id) {
+    public void deleteUser(Long id) {
         try {
             this.repository.delete(id);
         } catch (IllegalArgumentException e) {
@@ -27,7 +27,7 @@ public class ServiceFile {
     }
 
 
-    public Iterable<Utilizator> printAll() {
+    public Iterable<User> printAll() {
         return this.repository.findAll();
     }
 
@@ -35,23 +35,23 @@ public class ServiceFile {
         try {
             boolean ok = true;
             if (!Objects.equals(id1, id2)) {
-                Utilizator utilizator1 = this.repository.findOne(id1);
-                Utilizator utilizator2 = this.repository.findOne(id2);
-                for (Utilizator user : utilizator1.getFriends()) {
+                User user1 = this.repository.findOne(id1);
+                User user2 = this.repository.findOne(id2);
+                for (User user : user1.getFriends()) {
                     if (Objects.equals(user.getId(), id2)) {
                         ok = false;
                         break;
                     }
                 }
-                for (Utilizator user : utilizator2.getFriends()) {
+                for (User user : user2.getFriends()) {
                     if (Objects.equals(user.getId(), id1)) {
                         ok = false;
                         break;
                     }
                 }
                 if (ok) {
-                    utilizator1.makeFriend(utilizator2);
-                    utilizator2.makeFriend(utilizator1);
+                    user1.makeFriend(user2);
+                    user2.makeFriend(user1);
                     this.repository.saveFriendsToFile();
                 }
             }
@@ -61,10 +61,10 @@ public class ServiceFile {
     }
 
     public void deleteFriend(Long id1, Long id2) {
-        Utilizator utilizator1 = this.repository.findOne(id1);
-        Utilizator utilizator2 = this.repository.findOne(id2);
-        this.repository.deleteOneFriend(id2, utilizator1);
-        this.repository.deleteOneFriend(id1, utilizator2);
+        User user = this.repository.findOne(id1);
+        User user1 = this.repository.findOne(id2);
+        this.repository.deleteOneFriend(id2, user);
+        this.repository.deleteOneFriend(id1, user1);
         this.repository.saveFriendsToFile();
     }
 
@@ -78,7 +78,7 @@ public class ServiceFile {
         return graph.getLargestConnectedComponent().stream().toList();
     }
 
-    public Utilizator getById(Long x) {
+    public User getById(Long x) {
         return this.repository.findOne(x);
     }
 }
