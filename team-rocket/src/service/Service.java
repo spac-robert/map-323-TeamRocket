@@ -14,8 +14,11 @@ public class Service {
     }
 
 
-    public void saveUser(String firstName, String lastName) {
-        serviceFile.saveUser(firstName, lastName);
+    public boolean saveUser(String firstName, String lastName) {
+        User user = new User(firstName, lastName);
+        serviceFile.saveUser(user);
+        return serviceDatabase.saveUser(user);
+
     }
 
     public void addFriend(Long id1, Long id2) {
@@ -26,8 +29,9 @@ public class Service {
         serviceFile.deleteFriend(id1, id2);
     }
 
-    public void deleteUser(Long id) {
-        serviceFile.deleteUser(id);
+    public boolean deleteUser(Long id) {
+        //serviceFile.deleteUser(id);
+        return serviceDatabase.deleteUser(id);
     }
 
     public int getNrOfConnectedComponents() {
@@ -48,6 +52,11 @@ public class Service {
 
     public Iterable<User> printAllUsersFromDB() {
         return serviceDatabase.findAllUsers();
+    }
+
+    public boolean updateUser(Long id, String firstName, String lastName) {
+        User user = new User(firstName, lastName);
+        return serviceDatabase.updateUser(id, user);
     }
 
 }

@@ -18,8 +18,11 @@ public class UI {
         System.out.println("Dati prenumele si numele utilizatorului de adaugat: ");
         String firstName = sc.nextLine();
         String lastName = sc.nextLine();
-        this.service.saveUser(firstName, lastName);
-        System.out.println("Utilizatorul a fost adaugat!");
+        if (this.service.saveUser(firstName, lastName)) {
+            System.out.println("Utilizatorul a fost adaugat!");
+        } else {
+            System.out.println("User already exists");
+        }
     }
 
     private void addFriendUI() {
@@ -58,8 +61,11 @@ public class UI {
             Scanner sc = new Scanner(System.in);
             System.out.println("Dati id-ul utilizatorului de sters: ");
             Long id = sc.nextLong();
-            this.service.deleteUser(id);
-            System.out.println("Utilizatorul a fost sters!");
+            if (this.service.deleteUser(id)) {
+                System.out.println("User deleted successfully");
+            } else {
+                System.out.println("User couldn't be deleted");
+            }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -84,22 +90,43 @@ public class UI {
     }
 
     private void menuPrint() {
-        System.out.println("Selectati optiunea: ");
-        System.out.println("1. Adaugare utilizator");
-        System.out.println("2. Stergere utilizator");
-        System.out.println("3. Afisare utilizatori");
-        System.out.println("4. Adaugare prieten");
-        System.out.println("5. Stergere prieten");
-        System.out.println("6. Determinarea numarului de comunitati");
-        System.out.println("7. Determinarea celei mai sociabile comunitati");
+        System.out.println("-----MENU-----");
+        System.out.println("Select an option: ");
+        System.out.println("0. Exit");
+        System.out.println("1. Add user");
+        System.out.println("2. Delete user");
+        System.out.println("3. Display all users");
+        System.out.println("4. Add friendship between 2 users");
+        System.out.println("5. Delete friend");
+        System.out.println("6. Determinate number of connected components");
+        System.out.println("7. Determinate the biggest connected component");
         System.out.println("8. Read users from db");
-        System.out.println("0. Iesire");
+        System.out.println("9. Update users from db");
         System.out.println("-----------------------");
     }
 
     private void printUsersFromDB() {
         Iterable<User> users = this.service.printAllUsersFromDB();
         users.forEach(System.out::println);
+    }
+
+    private void updateUser() {
+        Scanner sc = new Scanner(System.in);
+        try {
+            System.out.println("Give the user's id to update:");
+            Long id1 = sc.nextLong();
+            System.out.println("First name: ");
+            String firstName = sc.next();
+            System.out.println("Last name: ");
+            String lastName = sc.next();
+            if (this.service.updateUser(id1, firstName, lastName)) {
+                System.out.println("User updated successfully");
+            } else {
+                System.out.println("Couldn't update the user");
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void menu() {
@@ -110,20 +137,14 @@ public class UI {
             int option = sc.nextInt();
             switch (option) {
                 case 1 -> saveUI();
-
                 case 2 -> deleteUI();
-
                 case 3 -> printAllUI();
-
                 case 4 -> addFriendUI();
-
                 case 5 -> deleteFriendUI();
                 case 6 -> getNrOfConnectedComponentsUI();
-
                 case 7 -> getLargestConnectedComponentUI();
-
                 case 8 -> printUsersFromDB();
-
+                case 9 -> updateUser();
                 case 0 -> loop = false;
                 default -> System.out.println("Optiune inexistenta! Reincercati!");
 

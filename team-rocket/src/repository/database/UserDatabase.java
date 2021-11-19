@@ -84,16 +84,51 @@ public class UserDatabase implements Repository<Long, User> {
 
     @Override
     public User save(User entity) {
-        return null;
+        //why I need to return a class instead of a boolean value for saving?
+        User user = null;
+        try {
+            String query = "insert into users (first_name,last_name) values (?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.execute();
+            user = entity;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
     }
 
     @Override
-    public User delete(Long aLong) {
-        return null;
+    public User delete(Long userId) {
+        //why I need to return a class instead of a boolean value for deleting?
+        User user = findOne(userId);
+        try {
+            String query = "delete from users where id=" + userId;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
     }
 
     @Override
     public User update(User entity) {
-        return null;
+        //why I need to return a class instead of a boolean value for updating?
+        User user = null;
+        try {
+            String query = "update users set first_name=?,last_name=? where id=" + entity.getId();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.execute();
+            user = entity;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
     }
 }

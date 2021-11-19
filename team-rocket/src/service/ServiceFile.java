@@ -13,8 +13,7 @@ public class ServiceFile {
         this.repository = repository;
     }
 
-    public void saveUser(String firstName, String lastName) {
-        User user = new User(firstName, lastName);
+    public void saveUser(User user) {
         this.repository.save(user);
     }
 

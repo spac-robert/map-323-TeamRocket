@@ -13,4 +13,22 @@ public class ServiceDatabase {
     public Iterable<User> findAllUsers() {
         return repository.findAll();
     }
+
+    public boolean saveUser(User user) {
+        return repository.save(user) != null;
+    }
+
+    public boolean deleteUser(Long idUser) {
+        return repository.delete(idUser) != null;
+    }
+
+
+    public boolean updateUser(Long id, User updatedUser) {
+        User user = repository.findOne(id);
+        if (user != null) {
+            updatedUser.setId(id);
+            return repository.update(updatedUser) != null;
+        }
+        return false;
+    }
 }
