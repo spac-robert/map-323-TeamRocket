@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<ID, E> {
 
-    private final Validator<E> validator;
+    protected final Validator<E> validator;
     protected Map<ID, E> entities;
 
     public InMemoryRepository(Validator<E> validator) {
@@ -18,6 +18,7 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
         entities = new HashMap<>();
     }
 
+    @Override
     public Map<ID,E> getEntities(){
         return this.entities;
     }

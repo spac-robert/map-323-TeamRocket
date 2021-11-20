@@ -3,6 +3,7 @@ package service;
 import domain.User;
 import repository.file.AbstractFileRepository;
 import repository.graph.Graph;
+import repository.graph.UserGraph;
 
 import java.util.*;
 
@@ -68,12 +69,12 @@ public class ServiceFile {
     }
 
     public int getNrOfConnectedComponents() {
-        Graph graph = new Graph(this.repository);
+        Graph<Long> graph = new UserGraph(this.repository);
         return graph.getNrOfConnectedComponents();
     }
 
     public List<Long> getLargestConnectedComponent() {
-        Graph graph = new Graph(this.repository);
+        Graph<Long> graph = new UserGraph(this.repository);
         return graph.getLargestConnectedComponent().stream().toList();
     }
 

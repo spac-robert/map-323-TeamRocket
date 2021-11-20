@@ -18,7 +18,7 @@ public class UI {
         System.out.println("Dati prenumele si numele utilizatorului de adaugat: ");
         String firstName = sc.nextLine();
         String lastName = sc.nextLine();
-        if (this.service.saveUser(firstName, lastName)) {
+        if (this.service.saveUser(firstName, lastName) != null) {
             System.out.println("Utilizatorul a fost adaugat!");
         } else {
             System.out.println("User already exists");
@@ -61,7 +61,7 @@ public class UI {
             Scanner sc = new Scanner(System.in);
             System.out.println("Dati id-ul utilizatorului de sters: ");
             Long id = sc.nextLong();
-            if (this.service.deleteUser(id)) {
+            if (this.service.deleteUser(id) != null) {
                 System.out.println("User deleted successfully");
             } else {
                 System.out.println("User couldn't be deleted");
@@ -100,14 +100,8 @@ public class UI {
         System.out.println("5. Delete friend");
         System.out.println("6. Determinate number of connected components");
         System.out.println("7. Determinate the biggest connected component");
-        System.out.println("8. Read users from db");
-        System.out.println("9. Update users from db");
+        System.out.println("8. Update users from db");
         System.out.println("-----------------------");
-    }
-
-    private void printUsersFromDB() {
-        Iterable<User> users = this.service.printAllUsersFromDB();
-        users.forEach(System.out::println);
     }
 
     private void updateUser() {
@@ -119,7 +113,7 @@ public class UI {
             String firstName = sc.next();
             System.out.println("Last name: ");
             String lastName = sc.next();
-            if (this.service.updateUser(id1, firstName, lastName)) {
+            if (this.service.updateUser(id1, firstName, lastName) != null) {
                 System.out.println("User updated successfully");
             } else {
                 System.out.println("Couldn't update the user");
@@ -143,8 +137,7 @@ public class UI {
                 case 5 -> deleteFriendUI();
                 case 6 -> getNrOfConnectedComponentsUI();
                 case 7 -> getLargestConnectedComponentUI();
-                case 8 -> printUsersFromDB();
-                case 9 -> updateUser();
+                case 8 -> updateUser();
                 case 0 -> loop = false;
                 default -> System.out.println("Optiune inexistenta! Reincercati!");
 

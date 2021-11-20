@@ -1,12 +1,13 @@
 package repository.database;
 
 import domain.User;
-import repository.Repository;
+import domain.validators.Validator;
+import repository.memory.InMemoryRepository;
 
 import java.sql.*;
 import java.util.*;
 
-public class UserDatabase implements Repository<Long, User> {
+public class UserDatabase extends InMemoryRepository<Long, User> {
     private final String userId = "id";
     private final String userFirstName = "first_name";
     private final String userLastname = "last_name";
@@ -20,14 +21,15 @@ public class UserDatabase implements Repository<Long, User> {
         connection = DriverManager.getConnection(jdbcURL, properties);
     }
 
-    public UserDatabase(String jdbcURL, String username, String password) throws SQLException {
+    public UserDatabase(String jdbcURL, String username, String password, Validator<User> validator) throws SQLException {
+        super(validator);
         connect(jdbcURL, username, password);
+        populateRepository();
     }
-
 
     @Override
     public User findOne(Long idFriend) {
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement("Select first_name,last_name from users where id=" + idFriend);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -38,7 +40,7 @@ public class UserDatabase implements Repository<Long, User> {
             user.setId(idFriend);
             return user;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
@@ -61,7 +63,6 @@ public class UserDatabase implements Repository<Long, User> {
 
     @Override
     public Iterable<User> findAll() {
-        Map<Long, User> users = new HashMap<>();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users");
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -73,18 +74,17 @@ public class UserDatabase implements Repository<Long, User> {
                 User user = new User(firstName, lastName);
                 user.setId(id);
                 user = addFriendship(user);
-                users.put(id, user);
+                entities.put(id, user);
 
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return users.values();
+        return entities.values();
     }
 
     @Override
     public User save(User entity) {
-        //why I need to return a class instead of a boolean value for saving?
         User user = null;
         try {
             String query = "insert into users (first_name,last_name) values (?,?)";
@@ -102,7 +102,6 @@ public class UserDatabase implements Repository<Long, User> {
 
     @Override
     public User delete(Long userId) {
-        //why I need to return a class instead of a boolean value for deleting?
         User user = findOne(userId);
         try {
             String query = "delete from users where id=" + userId;
@@ -117,7 +116,6 @@ public class UserDatabase implements Repository<Long, User> {
 
     @Override
     public User update(User entity) {
-        //why I need to return a class instead of a boolean value for updating?
         User user = null;
         try {
             String query = "update users set first_name=?,last_name=? where id=" + entity.getId();
@@ -130,5 +128,9 @@ public class UserDatabase implements Repository<Long, User> {
             System.out.println(e.getMessage());
         }
         return user;
+    }
+
+    private void populateRepository() {
+        findAll();
     }
 }

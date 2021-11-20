@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class UtilizatorFile extends AbstractFileRepository<Long, User> {
+public class UserFile extends AbstractFileRepository<Long, User> {
 
     private static Long nextId = 0L;
 
@@ -16,7 +16,7 @@ public class UtilizatorFile extends AbstractFileRepository<Long, User> {
         return this.entities;
     }
 
-    public UtilizatorFile(String fileName, String fileName2, Validator<User> validator) {
+    public UserFile(String fileName, String fileName2, Validator<User> validator) {
         super(fileName, fileName2, validator);
         nextId++;
     }
