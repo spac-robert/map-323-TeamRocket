@@ -15,7 +15,8 @@ public class UserGraph extends AbstractGraph<Long> {
         createGraph(repository);
     }
 
-    private void createGraph(InMemoryRepository<Long, User> repository) {
+    @Override
+    public void createGraph(InMemoryRepository<Long, User> repository) {
         keyList = new ArrayList<>(repository.getEntities().keySet());
         for (Long key : keyList) {
             addVertex(key);

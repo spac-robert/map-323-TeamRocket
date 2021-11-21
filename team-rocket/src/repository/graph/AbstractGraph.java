@@ -6,8 +6,8 @@ public abstract class AbstractGraph<ID> implements Graph<ID> {
     protected Map<ID, List<ID>> adjVertices = new HashMap<>();
 
     @Override
-    public boolean addVertex(ID id) {
-        return adjVertices.putIfAbsent(id, new ArrayList<>()) != null;
+    public void addVertex(ID id) {
+        adjVertices.putIfAbsent(id, new ArrayList<>());
     }
 
     @Override

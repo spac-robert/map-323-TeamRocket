@@ -1,11 +1,9 @@
 package service;
 
 import domain.User;
-import repository.Repository;
 import repository.database.UserRepository;
 import repository.graph.Graph;
 import repository.graph.UserGraph;
-import repository.memory.InMemoryRepository;
 
 import java.util.List;
 
@@ -39,10 +37,12 @@ public class Service {
     }
 
     public int getNrOfConnectedComponents() {
+        graph.createGraph(repository);
         return graph.getNrOfConnectedComponents();
     }
 
     public List<Long> getLargestConnectedComponent() {
+        graph.createGraph(repository);
         return graph.getLargestConnectedComponent().stream().toList();
     }
 

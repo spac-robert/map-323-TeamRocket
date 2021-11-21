@@ -149,8 +149,8 @@ public class UserDatabase extends UserRepository<Long, User> {
         try {
             String query = "insert into friendship (id_user1,id_user2) values (?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1,idUser1);
-            preparedStatement.setLong(2,idUser2);
+            preparedStatement.setLong(1, idUser1);
+            preparedStatement.setLong(2, idUser2);
             preparedStatement.execute();
 
         } catch (SQLException e) {
@@ -163,8 +163,8 @@ public class UserDatabase extends UserRepository<Long, User> {
         try {
             String query = "delete from friendship where id_user1=? and id_user2=?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, String.valueOf(idUser1));
-            preparedStatement.setString(2, String.valueOf(idUser2));
+            preparedStatement.setLong(1, idUser1);
+            preparedStatement.setLong(2, idUser2);
             preparedStatement.execute();
 
         } catch (SQLException e) {

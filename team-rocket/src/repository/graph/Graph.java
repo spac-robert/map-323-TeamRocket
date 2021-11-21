@@ -1,13 +1,13 @@
 package repository.graph;
 
 import domain.User;
-import repository.file.AbstractFileRepository;
+import repository.memory.InMemoryRepository;
 
 import java.util.*;
 
 public interface Graph<ID> {
 
-    boolean addVertex(ID id);
+    void addVertex(ID id);
 
     List<ID> getAdjVertices(ID id);
 
@@ -20,4 +20,6 @@ public interface Graph<ID> {
     int getNrOfConnectedComponents();
 
     Set<ID> getLargestConnectedComponent();
+
+    void createGraph(InMemoryRepository<Long, User> repository);
 }
