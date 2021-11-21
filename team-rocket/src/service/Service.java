@@ -5,7 +5,9 @@ import repository.database.UserRepository;
 import repository.graph.Graph;
 import repository.graph.UserGraph;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Service {
     private final UserRepository<Long, User> repository;
@@ -41,9 +43,16 @@ public class Service {
         return graph.getNrOfConnectedComponents();
     }
 
-    public List<Long> getLargestConnectedComponent() {
+    public Map<Long, User> getLargestConnectedComponent() {
         graph.createGraph(repository);
-        return graph.getLargestConnectedComponent().stream().toList();
+        Map<Long, User> mapOfUsers = new HashMap<>();
+        List<Long> listOfId = graph.getLargestConnectedComponent().stream().toList();
+        listOfId.forEach(id -> {
+            User user = repository.findOne(id);
+            user = repository.getFriends(user);
+            mapOfUsers.put(user.getId(), user);
+        });
+        return mapOfUsers;
     }
 
     public User getById(Long id) {
@@ -59,5 +68,4 @@ public class Service {
         user.setId(id);
         return repository.update(user);
     }
-
 }

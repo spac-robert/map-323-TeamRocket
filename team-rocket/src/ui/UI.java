@@ -4,6 +4,7 @@ import domain.User;
 import service.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class UI {
@@ -78,9 +79,9 @@ public class UI {
 
     private void getLargestConnectedComponentUI() {
         System.out.println("Cea mai sociabila comunitate este: \n");
-        List<Long> largestConnectedComponent = this.service.getLargestConnectedComponent();
-        for (Long x : largestConnectedComponent) {
-            System.out.println(service.getById(x));
+        Map<Long, User> largestConnectedComponent = this.service.getLargestConnectedComponent();
+        for (Long x : largestConnectedComponent.keySet()) {
+            System.out.println(largestConnectedComponent.get(x));
         }
     }
 

@@ -35,6 +35,7 @@ public class UserDatabase extends UserRepository<Long, User> {
         return null;
     }
 
+
     public Long findOne(String firstName, String lastName) {
         PreparedStatement preparedStatement;
         try {
@@ -51,7 +52,8 @@ public class UserDatabase extends UserRepository<Long, User> {
         return null;
     }
 
-    private User addFriendship(User user) {
+    @Override
+    public User getFriends(User user) {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement("SELECT id_user2 from friendship where id_user1=" + user.getId());
@@ -79,7 +81,7 @@ public class UserDatabase extends UserRepository<Long, User> {
                 String lastName = resultSet.getString(userLastname);
                 User user = new User(firstName, lastName);
                 user.setId(id);
-                user = addFriendship(user);
+                user = getFriends(user);
                 entities.put(id, user);
 
             }
