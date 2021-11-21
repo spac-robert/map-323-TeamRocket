@@ -8,7 +8,7 @@ import repository.Repository;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<ID, E> {
+public abstract class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<ID, E> {
 
     protected final Validator<E> validator;
     protected Map<ID, E> entities;
@@ -19,7 +19,7 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
     }
 
     @Override
-    public Map<ID,E> getEntities(){
+    public Map<ID, E> getEntities() {
         return this.entities;
     }
 
@@ -53,7 +53,7 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements Repository<
     @Override
     public E delete(ID id) {
         E entity = entities.get(id);
-        if(entity==null){
+        if (entity == null) {
             throw new IllegalArgumentException("deleted entity doesn't exist");
         }
 

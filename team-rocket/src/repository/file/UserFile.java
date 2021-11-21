@@ -81,10 +81,10 @@ public class UserFile extends AbstractFileRepository<Long, User> {
     @Override
     public void deleteOneFriend(Long id, User entity) {
         for (int i = 0; i < entity.getFriends().size(); i++) {
-            User utilizator = entity.getFriends().get(i);
-            if (Objects.equals(utilizator.getId(), id)) {
+            User user = entity.getFriends().get(i);
+            if (Objects.equals(user.getId(), id)) {
                 List<User> list = entity.getFriends();
-                list.remove(utilizator);
+                list.remove(user);
             }
         }
     }
@@ -111,8 +111,8 @@ public class UserFile extends AbstractFileRepository<Long, User> {
             for (Long key : keyList) {
                 writeToFile(entities.get(key));
             }
-            for (User utilizator : this.entities.values()) {
-                deleteOneFriend(id, utilizator);
+            for (User user : this.entities.values()) {
+                deleteOneFriend(id, user);
             }
             saveFriendsToFile();
         }
