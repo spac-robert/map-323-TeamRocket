@@ -39,7 +39,7 @@ public class UserDatabase extends UserRepository<Long, User> {
     public Long findOne(String firstName, String lastName) {
         PreparedStatement preparedStatement;
         try {
-            preparedStatement = connection.prepareStatement("Select id from users where first_name=? and lastName=?");
+            preparedStatement = connection.prepareStatement("Select id from users where first_name=? and last_name=?");
             preparedStatement.setString(1, firstName);
             preparedStatement.setString(2, lastName);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -47,7 +47,7 @@ public class UserDatabase extends UserRepository<Long, User> {
             Long id = resultSet.getLong("id");
             return id;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }

@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 public class Main {
 
+    //TODO Add Datetime to friendships
     public static UserRepository<Long, User> readAccount() throws IOException, SQLException {
         BufferedReader reader = new BufferedReader(new FileReader("data/database-connection.txt"));
         String name = reader.readLine();
@@ -23,8 +24,6 @@ public class Main {
         return new UserDatabase(conn, new UserValidator());
     }
 
-    ///TODO Create a static class ConnectionDatabase that has username,password,url and will return a Connection
-    ///TODO Create a class Relationship<ID> that has 2 entities
     public static void main(String[] args) {
         try {
             UserRepository<Long, User> repository = readAccount();

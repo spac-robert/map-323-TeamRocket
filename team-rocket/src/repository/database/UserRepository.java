@@ -1,7 +1,6 @@
 package repository.database;
 
 import domain.Entity;
-import domain.User;
 import domain.validators.Validator;
 import repository.memory.InMemoryRepository;
 
