@@ -23,8 +23,6 @@ public class Main {
         return new UserDatabase(conn, new UserValidator());
     }
 
-    ///TODO Create a static class ConnectionDatabase that has username,password,url and will return a Connection
-    ///TODO Create a class Relationship<ID> that has 2 entities
     public static void main(String[] args) {
         try {
             UserRepository<Long, User> repository = readAccount();

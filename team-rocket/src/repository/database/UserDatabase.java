@@ -4,6 +4,7 @@ import domain.User;
 import domain.validators.Validator;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class UserDatabase extends UserRepository<Long, User> {
     private final String userId = "id";
@@ -147,12 +148,13 @@ public class UserDatabase extends UserRepository<Long, User> {
     }
 
     @Override
-    public void addFriend(Long idUser1, Long idUser2) {
+    public void addFriend(Long idUser1, Long idUser2, LocalDate date) {
         try {
-            String query = "insert into friendship (id_user1,id_user2) values (?,?)";
+            String query = "insert into friendship (id_user1,id_user2,date) values (?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1, idUser1);
             preparedStatement.setLong(2, idUser2);
+            preparedStatement.setDate(3, Date.valueOf(date));
             preparedStatement.execute();
 
         } catch (SQLException e) {

@@ -3,6 +3,7 @@ package ui;
 import domain.User;
 import service.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -34,7 +35,8 @@ public class UI {
             Long id1 = sc.nextLong();
             System.out.println("Dati id-ul celui de al doilea utilizator: ");
             Long id2 = sc.nextLong();
-            this.service.addFriend(id1, id2);
+            LocalDate date = LocalDate.now();
+            this.service.addFriend(id1, id2,date);
             System.out.println("Prietenia a fost creata!");
         } catch (IllegalArgumentException | NullPointerException e) {
             System.out.println(e.getMessage());

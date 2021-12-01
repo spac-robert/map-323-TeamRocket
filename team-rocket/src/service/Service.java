@@ -5,6 +5,7 @@ import repository.database.UserRepository;
 import repository.graph.Graph;
 import repository.graph.UserGraph;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,9 @@ public class Service {
         return repository.save(user);
     }
 
-    public void addFriend(Long id1, Long id2) {
-        repository.addFriend(id1, id2);
-        repository.addFriend(id2, id1);
+    public void addFriend(Long id1, Long id2, LocalDate date) {
+        repository.addFriend(id1, id2,date);
+        repository.addFriend(id2, id1,date);
     }
 
     public void deleteFriend(Long id1, Long id2) {
