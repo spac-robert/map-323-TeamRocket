@@ -6,6 +6,7 @@ import repository.graph.Graph;
 import repository.graph.UserGraph;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,8 @@ public class Service {
     }
 
     public void addFriend(Long id1, Long id2, LocalDate date) {
-        repository.addFriend(id1, id2,date);
-        repository.addFriend(id2, id1,date);
+        repository.addFriend(id1, id2, date);
+        repository.addFriend(id2, id1, date);
     }
 
     public void deleteFriend(Long id1, Long id2) {
@@ -50,7 +51,7 @@ public class Service {
         List<Long> listOfId = graph.getLargestConnectedComponent().stream().toList();
         listOfId.forEach(id -> {
             User user = repository.findOne(id);
-            user = repository.getFriends(user);
+            user = repository.getFriend(user);
             mapOfUsers.put(user.getId(), user);
         });
         return mapOfUsers;
@@ -69,4 +70,9 @@ public class Service {
         user.setId(id);
         return repository.update(user);
     }
+
+    public Map<Long, Date> getFriends(Long iddUser) {
+        return repository.getFriends(iddUser);
+    }
+
 }

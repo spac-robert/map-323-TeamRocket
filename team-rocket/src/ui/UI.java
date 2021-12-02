@@ -4,6 +4,7 @@ import domain.User;
 import service.Service;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -36,7 +37,7 @@ public class UI {
             System.out.println("Dati id-ul celui de al doilea utilizator: ");
             Long id2 = sc.nextLong();
             LocalDate date = LocalDate.now();
-            this.service.addFriend(id1, id2,date);
+            this.service.addFriend(id1, id2, date);
             System.out.println("Prietenia a fost creata!");
         } catch (IllegalArgumentException | NullPointerException e) {
             System.out.println(e.getMessage());
@@ -126,6 +127,15 @@ public class UI {
         }
     }
 
+    private void getAllFriends(Scanner input) {
+        System.out.println("Give an id: ");
+        Long iddUser = input.nextLong();
+        Map<Long, Date> friendsMap = service.getFriends(iddUser);
+        for (Long key : friendsMap.keySet()) {
+            System.out.println(service.getById(key) + "|" + friendsMap.get(key));
+        }
+    }
+
     public void menu() {
         Scanner sc = new Scanner(System.in);
         boolean loop = true;
@@ -141,6 +151,7 @@ public class UI {
                 case 6 -> getNrOfConnectedComponentsUI();
                 case 7 -> getLargestConnectedComponentUI();
                 case 8 -> updateUser();
+                case 9 -> getAllFriends(sc);
                 case 0 -> loop = false;
                 default -> System.out.println("Optiune inexistenta! Reincercati!");
 

@@ -6,6 +6,8 @@ import domain.validators.Validator;
 import repository.memory.InMemoryRepository;
 
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.Map;
 
 public abstract class UserRepository<ID, E extends Entity<ID>> extends InMemoryRepository<ID, E> {
 
@@ -17,5 +19,7 @@ public abstract class UserRepository<ID, E extends Entity<ID>> extends InMemoryR
 
     public abstract void deleteFriend(ID id_user1, ID id_user2);
 
-    public abstract E getFriends(E user);
+    public abstract E getFriend(E user);
+
+    public abstract Map<ID, Date> getFriends(ID iddUser) ;
 }

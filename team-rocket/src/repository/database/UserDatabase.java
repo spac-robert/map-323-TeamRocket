@@ -5,6 +5,8 @@ import domain.validators.Validator;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserDatabase extends UserRepository<Long, User> {
     private final String userId = "id";
@@ -12,7 +14,7 @@ public class UserDatabase extends UserRepository<Long, User> {
     private final String userLastname = "last_name";
     private Connection connection;
 
-    public UserDatabase(Connection conn, Validator<User> validator) throws SQLException {
+    public UserDatabase(Connection conn, Validator<User> validator) {
         super(validator);
         connection = conn;
         populateRepository();
@@ -54,7 +56,7 @@ public class UserDatabase extends UserRepository<Long, User> {
     }
 
     @Override
-    public User getFriends(User user) {
+    public User getFriend(User user) {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement("SELECT id_user2 from friendship where id_user1=" + user.getId());
@@ -71,6 +73,25 @@ public class UserDatabase extends UserRepository<Long, User> {
     }
 
     @Override
+    public Map<Long, java.util.Date> getFriends(Long iddUser) {
+        Map<Long, java.util.Date> friendsMap = null;
+        try {
+            String query = "select id_user2,date from friendship where id_user1=" + iddUser;
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            friendsMap = new HashMap<>();
+            while (resultSet.next()) {
+                Long idFriend = resultSet.getLong("id_user2");
+                Date date = resultSet.getDate("date");
+                friendsMap.put(idFriend, date);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return friendsMap;
+    }
+
+    @Override
     public Iterable<User> findAll() {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users");
@@ -82,7 +103,7 @@ public class UserDatabase extends UserRepository<Long, User> {
                 String lastName = resultSet.getString(userLastname);
                 User user = new User(firstName, lastName);
                 user.setId(id);
-                user = getFriends(user);
+                user = getFriend(user);
                 entities.put(id, user);
 
             }
