@@ -6,10 +6,13 @@ import repository.graph.Graph;
 import repository.graph.UserGraph;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Service {
     private final UserRepository<Long, User> repository;
@@ -71,8 +74,12 @@ public class Service {
         return repository.update(user);
     }
 
-    public Map<Long, Date> getFriends(Long iddUser) {
-        return repository.getFriends(iddUser);
+    public Map<Long, LocalDate> getFriends(Long idUser) {
+        return repository.getFriends(idUser);
     }
 
+    public Map<Long, LocalDate> getFriends(Long idUser, Month month) {
+        Map<Long, LocalDate> friendsMap = repository.getFriends(idUser);
+        return friendsMap.entrySet().stream().filter(map -> map.getValue().getMonth().equals(month)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 }

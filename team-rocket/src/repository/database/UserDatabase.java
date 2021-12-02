@@ -73,8 +73,8 @@ public class UserDatabase extends UserRepository<Long, User> {
     }
 
     @Override
-    public Map<Long, java.util.Date> getFriends(Long iddUser) {
-        Map<Long, java.util.Date> friendsMap = null;
+    public Map<Long, LocalDate> getFriends(Long iddUser) {
+        Map<Long, LocalDate> friendsMap = null;
         try {
             String query = "select id_user2,date from friendship where id_user1=" + iddUser;
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -83,7 +83,7 @@ public class UserDatabase extends UserRepository<Long, User> {
             while (resultSet.next()) {
                 Long idFriend = resultSet.getLong("id_user2");
                 Date date = resultSet.getDate("date");
-                friendsMap.put(idFriend, date);
+                friendsMap.put(idFriend, date.toLocalDate());
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

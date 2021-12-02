@@ -21,5 +21,6 @@ public abstract class UserRepository<ID, E extends Entity<ID>> extends InMemoryR
 
     public abstract E getFriend(E user);
 
-    public abstract Map<ID, Date> getFriends(ID iddUser) ;
+    public abstract Map<ID, LocalDate> getFriends(ID iddUser);
+
 }

@@ -4,6 +4,7 @@ import domain.User;
 import service.Service;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,48 @@ public class UI {
 
     public UI(Service service) {
         this.service = service;
+    }
+
+    public void menu() {
+        Scanner sc = new Scanner(System.in);
+        boolean loop = true;
+        while (loop) {
+            menuPrint();
+            int option = sc.nextInt();
+            switch (option) {
+                case 1 -> saveUI();
+                case 2 -> deleteUI();
+                case 3 -> printAllUI();
+                case 4 -> addFriendUI();
+                case 5 -> deleteFriendUI();
+                case 6 -> getNrOfConnectedComponentsUI();
+                case 7 -> getLargestConnectedComponentUI();
+                case 8 -> updateUser();
+                case 9 -> getAllFriends(sc);
+                case 10 -> getFriends(sc);
+                case 0 -> loop = false;
+                default -> System.out.println("Optiune inexistenta! Reincercati!");
+            }
+        }
+    }
+
+    private void getFriends(Scanner input) {
+        try {
+            System.out.println("Give an user id: ");
+            Long id = input.nextLong();
+            System.out.println("Give a month: ");
+            Month month = Month.of(Integer.parseInt(input.next()));
+            Map<Long, LocalDate> friendsMap = service.getFriends(id, month);
+            if (friendsMap.isEmpty())
+                System.out.println("No friendship at this month " + month);
+            else {
+                for (Long key : friendsMap.keySet()) {
+                    System.out.println(service.getById(key) + "|" + friendsMap.get(key));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid input");
+        }
     }
 
     private void saveUI() {
@@ -130,32 +173,9 @@ public class UI {
     private void getAllFriends(Scanner input) {
         System.out.println("Give an id: ");
         Long iddUser = input.nextLong();
-        Map<Long, Date> friendsMap = service.getFriends(iddUser);
+        Map<Long, LocalDate> friendsMap = service.getFriends(iddUser);
         for (Long key : friendsMap.keySet()) {
             System.out.println(service.getById(key) + "|" + friendsMap.get(key));
-        }
-    }
-
-    public void menu() {
-        Scanner sc = new Scanner(System.in);
-        boolean loop = true;
-        while (loop) {
-            menuPrint();
-            int option = sc.nextInt();
-            switch (option) {
-                case 1 -> saveUI();
-                case 2 -> deleteUI();
-                case 3 -> printAllUI();
-                case 4 -> addFriendUI();
-                case 5 -> deleteFriendUI();
-                case 6 -> getNrOfConnectedComponentsUI();
-                case 7 -> getLargestConnectedComponentUI();
-                case 8 -> updateUser();
-                case 9 -> getAllFriends(sc);
-                case 0 -> loop = false;
-                default -> System.out.println("Optiune inexistenta! Reincercati!");
-
-            }
         }
     }
 }
