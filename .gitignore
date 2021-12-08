@@ -1,0 +1,6 @@
+# IDEA artifacts and output dirs
+.idea
+JavaDoc
+out
+*.iml
+data/*.txt
