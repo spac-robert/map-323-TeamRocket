@@ -1,5 +1,6 @@
 package ui;
 
+import domain.Message;
 import domain.User;
 import service.Service;
 
@@ -16,11 +17,11 @@ public class UI {
     }
 
     public void menu() {
-        Scanner sc = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         boolean loop = true;
         while (loop) {
             menuPrint();
-            int option = sc.nextInt();
+            int option = scanner.nextInt();
             switch (option) {
                 case 1 -> saveUI();
                 case 2 -> deleteUI();
@@ -30,14 +31,37 @@ public class UI {
                 case 6 -> getNrOfConnectedComponentsUI();
                 case 7 -> getLargestConnectedComponentUI();
                 case 8 -> updateUser();
-                case 9 -> getAllFriends(sc);
-                case 10 -> getFriends(sc);
-                case 11 -> sendMsg(sc);
+                case 9 -> getAllFriends(scanner);
+                case 10 -> getFriends(scanner);
+                case 11 -> sendMsg(scanner);
+                case 12 -> printConversation(scanner);
                 case 0 -> loop = false;
                 default -> System.out.println("Optiune inexistenta! Reincercati!");
             }
         }
     }
+
+    //TODO: implement the sql query to get all conversation between 2 users (citit baze de date)
+    private void printConversation(Scanner scanner) {
+        try {
+            System.out.println("Give an user id: ");
+            Long idUser1 = scanner.nextLong();
+            System.out.println("Give an user id: ");
+            Long idUser2 = scanner.nextLong();
+            List<String> messages = service.getConversation(idUser1, idUser2);
+            printMsg(messages);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid input");
+        }
+
+    }
+
+    private void printMsg(List<String> messages) {
+        for (String msg : messages) {
+            System.out.println(msg);
+        }
+    }
+
 
     private void sendMsg(Scanner input) {
         try {
@@ -79,11 +103,12 @@ public class UI {
 
     private void saveUI() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Dati prenumele si numele utilizatorului de adaugat: ");
+        System.out.println("Give first name: ");
         String firstName = sc.nextLine();
+        System.out.println("Give last name: ");
         String lastName = sc.nextLine();
         if (this.service.saveUser(firstName, lastName) != null) {
-            System.out.println("Utilizatorul a fost adaugat!");
+            System.out.println("User added successfully!");
         } else {
             System.out.println("User already exists");
         }
@@ -110,12 +135,12 @@ public class UI {
         printAllUI();
         Scanner sc = new Scanner(System.in);
         try {
-            System.out.println("Dati id-ul primului utilizator: ");
+            System.out.println("Give the id for the first user: ");
             Long id1 = sc.nextLong();
-            System.out.println("Dati id-ul celui de al doilea utilizator: ");
+            System.out.println("Give the id for the second user: ");
             Long id2 = sc.nextLong();
             this.service.deleteFriend(id1, id2);
-            System.out.println("Prietenia a fost stearsa!");
+            System.out.println("Friendship was deleted");
         } catch (IllegalArgumentException | NullPointerException e) {
             System.out.println(e.getMessage());
         }
@@ -124,7 +149,7 @@ public class UI {
     private void deleteUI() {
         try {
             Scanner sc = new Scanner(System.in);
-            System.out.println("Dati id-ul utilizatorului de sters: ");
+            System.out.println("Give the id of the deleting user: ");
             Long id = sc.nextLong();
             if (this.service.deleteUser(id) != null) {
                 System.out.println("User deleted successfully");
@@ -138,11 +163,11 @@ public class UI {
 
     private void getNrOfConnectedComponentsUI() {
         int nr = this.service.getNrOfConnectedComponents();
-        System.out.println("Numarul de comunitati este: " + nr);
+        System.out.println("Number of community: " + nr);
     }
 
     private void getLargestConnectedComponentUI() {
-        System.out.println("Cea mai sociabila comunitate este: \n");
+        System.out.println("The biggest community: \n");
         Map<Long, User> largestConnectedComponent = this.service.getLargestConnectedComponent();
         for (Long x : largestConnectedComponent.keySet()) {
             System.out.println(largestConnectedComponent.get(x));
@@ -166,7 +191,10 @@ public class UI {
         System.out.println("6. Determinate number of connected components");
         System.out.println("7. Determinate the biggest connected component");
         System.out.println("8. Update users from db");
+        System.out.println("9. Get all friends for a given user");
+        System.out.println("10. Get all friends in a specific month");
         System.out.println("11. Send message");
+        System.out.println("12. Display conversation between 2 users");
         System.out.println("-----------------------");
     }
 

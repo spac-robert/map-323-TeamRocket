@@ -94,4 +94,10 @@ public class Service {
         }
         messageDB.save(new Message(user, users, msg));
     }
+
+    public List<String> getConversation(Long idUser1, Long idUser2) {
+        return messageDB.getConversation(idUser1, idUser2);
+    }
+
+
 }
