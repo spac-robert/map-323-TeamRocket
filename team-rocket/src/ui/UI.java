@@ -1,5 +1,6 @@
 package ui;
 
+import domain.FriendRequest;
 import domain.Message;
 import domain.User;
 import service.Service;
@@ -36,9 +37,24 @@ public class UI {
                 case 11 -> sendMsg(scanner);
                 case 12 -> printConversation(scanner);
                 case 13 -> sendFriendRequest(scanner);
+                case 14 -> showNotification(scanner);
+                //case 14 -> acceptFriendRequest(scanner);
                 case 0 -> loop = false;
                 default -> System.out.println("Optiune inexistenta! Reincercati!");
             }
+        }
+    }
+
+    private void showNotification(Scanner scanner) {
+        try {
+            System.out.println("Give a user id");
+            long userId = scanner.nextLong();
+            Map<Long, FriendRequest> notifications = service.getNotifications(userId);
+            for (Long key : notifications.keySet()) {
+                System.out.println(notifications.get(key));
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid input");
         }
     }
 
@@ -211,8 +227,9 @@ public class UI {
         System.out.println("11. Send message");
         System.out.println("12. Display conversation between 2 users");
         System.out.println("13. Send a friend request");
-        System.out.println("14. Accept a friend request");
-        System.out.println("15. Reject a friend request");
+        System.out.println("14 . Show notifications");
+        System.out.println("15. Accept a friend request");
+        System.out.println("16. Reject a friend request");
         System.out.println("-----------------------");
     }
 

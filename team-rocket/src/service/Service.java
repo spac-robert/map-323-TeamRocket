@@ -113,4 +113,7 @@ public class Service {
         return friendRequestRepository.addFriendRequest(request);
     }
 
+    public Map<Long, FriendRequest> getNotifications(long userId) {
+        return friendRequestRepository.getNotifications(userId);
+    }
 }

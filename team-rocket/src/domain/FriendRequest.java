@@ -11,6 +11,14 @@ public class FriendRequest extends Entity<Long> {
         this.status = StatusFriendRequest.PENDING;
     }
 
+    public FriendRequest(long from, long to) {
+        this.from = new Entity<>();
+        this.from.setId(from);
+        this.to = new Entity<>();
+        this.to.setId(to);
+    }
+
+
     public Entity<Long> getFrom() {
         return from;
     }
@@ -33,5 +41,14 @@ public class FriendRequest extends Entity<Long> {
 
     public void setStatus(StatusFriendRequest status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "FriendRequest{" +
+                "from=" + from.getId() +
+                ", to=" + to.getId() +
+                ", status=" + status +
+                '}';
     }
 }
