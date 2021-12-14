@@ -47,8 +47,7 @@ public class UserDatabase extends UserRepository<Long, User> {
             preparedStatement.setString(2, lastName);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            Long id = resultSet.getLong("id");
-            return id;
+            return resultSet.getLong("id");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -105,7 +104,6 @@ public class UserDatabase extends UserRepository<Long, User> {
                 user.setId(id);
                 user = getFriend(user);
                 entities.put(id, user);
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

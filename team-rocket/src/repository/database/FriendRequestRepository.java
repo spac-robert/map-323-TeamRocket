@@ -2,17 +2,11 @@ package repository.database;
 
 import domain.FriendRequest;
 import domain.StatusFriendRequest;
-import domain.validators.FriendRequestValidation;
 import domain.validators.Validator;
 import repository.memory.InMemoryRepository;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class FriendRequestRepository extends InMemoryRepository<Long, FriendRequest> {
@@ -51,10 +45,10 @@ public class FriendRequestRepository extends InMemoryRepository<Long, FriendRequ
         }
     }
 
-    public FriendRequest addFriendRequest(FriendRequest friendRequest) {
+    public void addFriendRequest(FriendRequest friendRequest) {
         try {
             String query = "insert into friend_request(from_user,to_user,status) values(?,?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setLong(1, friendRequest.getFrom().getId());
             preparedStatement.setLong(2, friendRequest.getTo().getId());
             preparedStatement.setString(3, friendRequest.getStatus());
@@ -67,7 +61,28 @@ public class FriendRequestRepository extends InMemoryRepository<Long, FriendRequ
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return friendRequest;
     }
 
+    //delete friend request from in memory repository
+    public void updateStatus(long key, StatusFriendRequest approval) {
+        try {
+            String query = "update friend_request set status=? where id=?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, approval.convertToString());
+            statement.setLong(2, key);
+            statement.execute();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public FriendRequest findRequestBuy(long to, long from) {
+        for (Long key : this.entities.keySet()) {
+            FriendRequest request = entities.get(key);
+            if (request.getFrom().getId().equals(from) && request.getTo().getId().equals(to)) {
+                return request;
+            }
+        }
+        return null;
+    }
 }

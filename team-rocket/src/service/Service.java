@@ -1,9 +1,6 @@
 package service;
 
-import domain.Entity;
-import domain.FriendRequest;
-import domain.Message;
-import domain.User;
+import domain.*;
 import repository.database.FriendRequestRepository;
 import repository.database.MessageDB;
 import repository.database.UserRepository;
@@ -34,7 +31,8 @@ public class Service {
         return userRepository.save(user);
     }
 
-    public void addFriend(Long id1, Long id2, LocalDate date) {
+    public void addFriend(Long id1, Long id2) {
+        LocalDate date = LocalDate.now();
         userRepository.addFriend(id1, id2, date);
         userRepository.addFriend(id2, id1, date);
     }
@@ -104,16 +102,45 @@ public class Service {
         return messageDB.getConversation(idUser1, idUser2);
     }
 
-    public Entity<Long> sendFriendRequest(long from1, long to1) {
+    public void sendFriendRequest(long from1, long to1) {
         Entity<Long> from = new Entity<>();
         from.setId(from1);
         Entity<Long> to = new Entity<>();
         to.setId(to1);
         FriendRequest request = new FriendRequest(from, to);
-        return friendRequestRepository.addFriendRequest(request);
+        friendRequestRepository.addFriendRequest(request);
     }
 
     public Map<Long, FriendRequest> getNotifications(long userId) {
         return friendRequestRepository.getNotifications(userId);
+    }
+
+    public void updateStatusFriendRequest(long userId, long acceptRequestByUserId, StatusFriendRequest status) throws Exception {
+        FriendRequest request = friendRequestRepository.findRequestBuy(userId, acceptRequestByUserId);
+        if (request != null) {
+            friendRequestRepository.updateStatus(request.getId(), status);
+            friendRequestRepository.delete(request.getId());
+            if (status == StatusFriendRequest.APPROVAL) {
+                addFriend(userId, userId);
+            }
+        } else {
+            throw new Exception("Request doesn't exist");
+        }
+    }
+
+    //TODO de vazut de ce se salveaza in destinatie de 2 ori
+    public void replayMsg(Long from, String msg, long replyMsg) {
+        long messageIdReply;
+        User user = userRepository.findOne(from);
+        List<Long> listOfId = messageDB.getAllGroup(from, replyMsg);
+        Long to = messageDB.findOne(replyMsg).getFrom().getId();
+        List<User> listOfFriends = new ArrayList<>();
+        for (Long id : listOfId) {
+            listOfFriends.add(userRepository.findOne(id));
+        }
+        listOfFriends.add(userRepository.findOne(to));
+        messageIdReply = messageDB.save(new ReplyMessage(new Message(user, listOfFriends, msg), replyMsg)).getId();
+        // messageDB.saveDestination(listOfFriends, messageIdReply);
+
     }
 }

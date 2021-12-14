@@ -1,14 +1,13 @@
 package ui;
 
 import domain.FriendRequest;
-import domain.Message;
+import domain.StatusFriendRequest;
 import domain.User;
 import service.Service;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class UI {
     private final Service service;
@@ -35,13 +34,58 @@ public class UI {
                 case 9 -> getAllFriends(scanner);
                 case 10 -> getFriends(scanner);
                 case 11 -> sendMsg(scanner);
-                case 12 -> printConversation(scanner);
-                case 13 -> sendFriendRequest(scanner);
-                case 14 -> showNotification(scanner);
-                //case 14 -> acceptFriendRequest(scanner);
+                case 12 -> replyMsg(scanner);
+                case 13 -> printConversation(scanner);
+                case 14 -> sendFriendRequest(scanner);
+                case 15 -> showNotification(scanner);
+                case 16 -> acceptFriendRequest(scanner);
+                case 17 -> rejectFriendRequest(scanner);
                 case 0 -> loop = false;
                 default -> System.out.println("Optiune inexistenta! Reincercati!");
             }
+        }
+    }
+
+    private void replyMsg(Scanner input) {
+        try {
+            System.out.println("Give an user id: ");
+            Long id = input.nextLong();
+            System.out.println("Give the id of the message to reply: ");
+            long idMsg = input.nextLong();
+            input.nextLine();
+            System.out.println("Give a message: ");
+            String msg = input.nextLine();
+            service.replayMsg(id, msg, idMsg);
+        } catch (Exception e) {
+            System.out.println("Invalid input");
+        }
+    }
+
+    private void rejectFriendRequest(Scanner scanner) {
+        try {
+            System.out.println("Give a user id");
+            long userId = scanner.nextLong();
+            showNotification(userId);
+            System.out.println("Give a user id");
+            long acceptRequestByUserId = scanner.nextLong();
+            service.updateStatusFriendRequest(userId, acceptRequestByUserId, StatusFriendRequest.REJECT);
+            System.out.println();
+        } catch (Exception e) {
+            System.out.println("Invalid input");
+        }
+    }
+
+    private void acceptFriendRequest(Scanner scanner) {
+        try {
+            System.out.println("Give a user id");
+            long userId = scanner.nextLong();
+            showNotification(userId);
+            System.out.println("Give a user id");
+            long acceptRequestByUserId = scanner.nextLong();
+            service.updateStatusFriendRequest(userId, acceptRequestByUserId, StatusFriendRequest.APPROVAL);
+            System.out.println();
+        } catch (Exception e) {
+            System.out.println("Invalid input");
         }
     }
 
@@ -49,6 +93,17 @@ public class UI {
         try {
             System.out.println("Give a user id");
             long userId = scanner.nextLong();
+            Map<Long, FriendRequest> notifications = service.getNotifications(userId);
+            for (Long key : notifications.keySet()) {
+                System.out.println(notifications.get(key));
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid input");
+        }
+    }
+
+    private void showNotification(long userId) {
+        try {
             Map<Long, FriendRequest> notifications = service.getNotifications(userId);
             for (Long key : notifications.keySet()) {
                 System.out.println(notifications.get(key));
@@ -153,8 +208,7 @@ public class UI {
             Long id1 = sc.nextLong();
             System.out.println("Dati id-ul celui de al doilea utilizator: ");
             Long id2 = sc.nextLong();
-            LocalDate date = LocalDate.now();
-            this.service.addFriend(id1, id2, date);
+            this.service.addFriend(id1, id2);
             System.out.println("Prietenia a fost creata!");
         } catch (IllegalArgumentException | NullPointerException e) {
             System.out.println(e.getMessage());
@@ -225,11 +279,12 @@ public class UI {
         System.out.println("9. Get all friends for a given user");
         System.out.println("10. Get all friends in a specific month");
         System.out.println("11. Send message");
-        System.out.println("12. Display conversation between 2 users");
-        System.out.println("13. Send a friend request");
-        System.out.println("14 . Show notifications");
-        System.out.println("15. Accept a friend request");
-        System.out.println("16. Reject a friend request");
+        System.out.println("12. reply message");
+        System.out.println("13. Display conversation between 2 users");
+        System.out.println("14. Send a friend request");
+        System.out.println("15 . Show notifications");
+        System.out.println("16. Accept a friend request");
+        System.out.println("17. Reject a friend request");
         System.out.println("-----------------------");
     }
 

@@ -16,6 +16,11 @@ public class Message extends Entity<Long> {
         this.localDateTime = LocalDateTime.now();
     }
 
+    public Message(User from, String msg) {
+        this.from = from;
+        this.msg = msg;
+    }
+
     public LocalDateTime getLocalDateTime() {
         return localDateTime;
     }
