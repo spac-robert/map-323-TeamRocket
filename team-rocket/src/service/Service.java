@@ -1,10 +1,7 @@
 package service;
 
-import domain.Entity;
-import domain.FriendRequest;
 import domain.Message;
 import domain.User;
-import repository.database.FriendRequestRepository;
 import repository.database.MessageDB;
 import repository.database.UserRepository;
 import repository.graph.Graph;
@@ -17,14 +14,12 @@ import java.util.stream.Collectors;
 
 public class Service {
     private final UserRepository<Long, User> userRepository;
-    private final FriendRequestRepository friendRequestRepository;
     private final Graph<Long> graph;
     private final MessageDB messageDB;
 
-    public Service(UserRepository<Long, User> repository, FriendRequestRepository friendRequestRepository, MessageDB messageDB) {
+    public Service(UserRepository<Long, User> repository, MessageDB messageDB) {
         this.userRepository = repository;
         this.graph = new UserGraph(repository);
-        this.friendRequestRepository = friendRequestRepository;
         this.messageDB = messageDB;
     }
 
@@ -104,13 +99,5 @@ public class Service {
         return messageDB.getConversation(idUser1, idUser2);
     }
 
-    public Entity<Long> sendFriendRequest(long from1, long to1) {
-        Entity<Long> from = new Entity<>();
-        from.setId(from1);
-        Entity<Long> to = new Entity<>();
-        to.setId(to1);
-        FriendRequest request = new FriendRequest(from, to);
-        return friendRequestRepository.addFriendRequest(request);
-    }
 
 }
