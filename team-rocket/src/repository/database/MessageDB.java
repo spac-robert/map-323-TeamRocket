@@ -8,7 +8,10 @@ import repository.memory.InMemoryRepository;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MessageDB extends InMemoryRepository<Long, Message> {
     private final Connection connection;
@@ -50,6 +53,43 @@ public class MessageDB extends InMemoryRepository<Long, Message> {
             preparedStatement.setLong(2, id);
             preparedStatement.execute();
         }
+    }
+
+    //TODO:Make it to print the reply msg too
+    public List<String> getConversation(long from, long to) {
+        List<String> conversation = new ArrayList<>();
+        String query = """
+                select msg.id, msg.id_user, msg.msg,msg.date,msg.id_msg_reply
+                from message msg,destination dest
+                where (msg.id_user=? and dest.id_user_to=? and msg.id = dest.id_message)
+                or (msg.id_user=? and dest.id_user_to=? and msg.id = dest.id_message)""";
+        try {
+            PreparedStatement preparedStatement;
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setLong(1, from);
+            preparedStatement.setLong(2, to);
+            preparedStatement.setLong(3, to);
+            preparedStatement.setLong(4, from);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                long key = resultSet.getLong(1);
+                long id_user = resultSet.getLong(2);
+                String msg = resultSet.getString(3);
+                String date = resultSet.getString(4);
+                long id_msg_reply = resultSet.getLong(5);
+                StringBuilder message = new StringBuilder();
+                message.append(key).append(" | ").
+                        append(id_user).append(" | ").
+                        append(msg).append(" | ").
+                        append(date).append(" | ").
+                        append(id_msg_reply);
+
+                conversation.add(String.valueOf(message));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return conversation;
     }
 
 }
