@@ -1,5 +1,6 @@
 package ui;
 
+import domain.FriendRequest;
 import domain.Message;
 import domain.User;
 import service.Service;
@@ -35,18 +36,48 @@ public class UI {
                 case 10 -> getFriends(scanner);
                 case 11 -> sendMsg(scanner);
                 case 12 -> printConversation(scanner);
+                case 13 -> sendFriendRequest(scanner);
+                case 14 -> showNotification(scanner);
+                //case 14 -> acceptFriendRequest(scanner);
                 case 0 -> loop = false;
                 default -> System.out.println("Optiune inexistenta! Reincercati!");
             }
         }
     }
 
+    private void showNotification(Scanner scanner) {
+        try {
+            System.out.println("Give a user id");
+            long userId = scanner.nextLong();
+            Map<Long, FriendRequest> notifications = service.getNotifications(userId);
+            for (Long key : notifications.keySet()) {
+                System.out.println(notifications.get(key));
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid input");
+        }
+    }
+
+    private void sendFriendRequest(Scanner scanner) {
+        try {
+            long from;
+            long to;
+            System.out.println("Give a user id");
+            from = scanner.nextLong();
+            System.out.println("Give a user id");
+            to = scanner.nextLong();
+            service.sendFriendRequest(from, to);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid input");
+        }
+    }
+
     //TODO: implement the sql query to get all conversation between 2 users (citit baze de date)
     private void printConversation(Scanner scanner) {
         try {
-            System.out.println("Give an user id: ");
+            System.out.println("Give a user id: ");
             Long idUser1 = scanner.nextLong();
-            System.out.println("Give an user id: ");
+            System.out.println("Give a user id: ");
             Long idUser2 = scanner.nextLong();
             List<String> messages = service.getConversation(idUser1, idUser2);
             printMsg(messages);
@@ -195,6 +226,10 @@ public class UI {
         System.out.println("10. Get all friends in a specific month");
         System.out.println("11. Send message");
         System.out.println("12. Display conversation between 2 users");
+        System.out.println("13. Send a friend request");
+        System.out.println("14 . Show notifications");
+        System.out.println("15. Accept a friend request");
+        System.out.println("16. Reject a friend request");
         System.out.println("-----------------------");
     }
 
